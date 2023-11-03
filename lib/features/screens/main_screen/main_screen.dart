@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
+import 'package:raon/features/widgets/permission_handler.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -23,23 +24,31 @@ class _MainScreenState extends State<MainScreen> {
   /// Initialize Main Page URL
   final String url = "http://raon.sogeum.kr/";
 
-  /// Exit Application with double touch on foreground
+  /// Import BackHandlerButton
   BackHandlerButton? _backHandlerButton;
 
   @override
   void initState() {
     super.initState();
 
+    /// Improve Android Performance
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
-    _controller.future.then((WebViewController webViewController) {
-      _viewController = webViewController;
-      _backHandlerButton = BackHandlerButton(
-        context: context,
-        controller: webViewController,
-        mainUrl: url,
-      );
-    });
+    /// Exit Application with double touch on foreground
+    _controller.future.then(
+      (WebViewController webViewController) {
+        _viewController = webViewController;
+        _backHandlerButton = BackHandlerButton(
+          context: context,
+          controller: webViewController,
+          mainUrl: url,
+        );
+      },
+    );
+
+    /// Request user permission to access external storage
+    StoragePermissionHandler permissionHandler = StoragePermissionHandler(context);
+    permissionHandler.requestStoragePermission();
   }
 
   @override
