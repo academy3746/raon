@@ -32,7 +32,7 @@ class AppVersionChecker {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("앱 업데이트 안내"),
-          content: const Text("최신 버전의 앱이 아닙니다.\n업데이트를 위해 마켓으로 이동하시겠습니까?"),
+          content: const Text("최신 버전의 앱이 아닙니다.\n업데이트를 위해 마켓으로\n이동하시겠습니까?"),
           actions: [
             TextButton(
               onPressed: () async {
