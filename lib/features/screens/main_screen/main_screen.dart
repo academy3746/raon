@@ -31,6 +31,9 @@ class _MainScreenState extends State<MainScreen> {
   /// Import App Cookie Handler
   AppCookieHandler? appCookieHandler;
 
+  // Page Loading Indicator
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +54,8 @@ class _MainScreenState extends State<MainScreen> {
     );
 
     /// Request user permission to access external storage
-    StoragePermissionHandler permissionHandler = StoragePermissionHandler(context);
+    StoragePermissionHandler permissionHandler =
+        StoragePermissionHandler(context);
     permissionHandler.requestStoragePermission();
 
     /// Initialize Cookie Settings
@@ -70,22 +74,50 @@ class _MainScreenState extends State<MainScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: WebView(
-            initialUrl: url,
-            javascriptMode: JavascriptMode.unrestricted,
-            onPageStarted: (String url) async {
-              print("Current Url: $url");
-            },
-            onWebViewCreated: (WebViewController webViewController) async {
-              _controller.complete(webViewController);
-              viewController = webViewController;
-            },
-            onWebResourceError: (error) {
-              print("Error Code: ${error.errorCode}");
-              print("Error Description: ${error.description}");
-            },
-          ),
+        body: Stack(
+          children: [
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return SafeArea(
+                  child: WebView(
+                    initialUrl: url,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onPageStarted: (String url) async {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      print("Current Url: $url");
+                    },
+                    onPageFinished: (String url) async {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    onWebViewCreated: (WebViewController webViewController) async {
+                      _controller.complete(webViewController);
+                      viewController = webViewController;
+
+                      /// Get Cookie Statement
+                      await appCookieHandler?.setCookies(
+                        appCookieHandler!.cookieValue,
+                        appCookieHandler!.domain,
+                        appCookieHandler!.cookieName,
+                        appCookieHandler!.url,
+                      );
+                    },
+                    onWebResourceError: (error) {
+                      print("Error Code: ${error.errorCode}");
+                      print("Error Description: ${error.description}");
+                    },
+                  ),
+                );
+              },
+            ),
+            isLoading ? const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ) : Container(),
+          ],
         ),
       ),
     );
