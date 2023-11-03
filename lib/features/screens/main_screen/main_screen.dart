@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
                       print("Error Code: ${error.errorCode}");
                       print("Error Description: ${error.description}");
                     },
-                    zoomEnabled: true,
+                    zoomEnabled: false,
                     gestureRecognizers: Set()
                       ..add(
                         Factory<EagerGestureRecognizer>(
