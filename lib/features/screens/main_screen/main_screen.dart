@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:raon/features/widgets/app_cookie_handler.dart';
+import 'package:raon/features/widgets/app_version_check_handler.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
 import 'package:raon/features/widgets/permission_handler.dart';
 
@@ -62,6 +63,10 @@ class _MainScreenState extends State<MainScreen> {
 
     /// Initialize Cookie Settings
     appCookieHandler = AppCookieHandler(url, url);
+
+    /// App Version Check Manually
+    AppVersionChecker appVersionChecker = AppVersionChecker(context);
+    appVersionChecker.getAppVersion();
   }
 
   @override
