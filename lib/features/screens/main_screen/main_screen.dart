@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   /// Import App Cookie Handler
   AppCookieHandler? appCookieHandler;
 
-  // Page Loading Indicator
+  /// Page Loading Indicator
   bool isLoading = false;
 
   @override
@@ -96,7 +96,8 @@ class _MainScreenState extends State<MainScreen> {
                         isLoading = false;
                       });
                     },
-                    onWebViewCreated: (WebViewController webViewController) async {
+                    onWebViewCreated:
+                        (WebViewController webViewController) async {
                       _controller.complete(webViewController);
                       viewController = webViewController;
 
@@ -116,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
                     gestureRecognizers: Set()
                       ..add(
                         Factory<EagerGestureRecognizer>(
-                              () => EagerGestureRecognizer(),
+                          () => EagerGestureRecognizer(),
                         ),
                       ),
                     gestureNavigationEnabled: true,
@@ -124,9 +125,11 @@ class _MainScreenState extends State<MainScreen> {
                 );
               },
             ),
-            isLoading ? const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ) : Container(),
+            isLoading
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Container(),
           ],
         ),
       ),
