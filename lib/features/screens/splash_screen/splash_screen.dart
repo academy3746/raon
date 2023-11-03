@@ -5,6 +5,7 @@ import 'package:raon/features/screens/main_screen/main_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
+
   static String routeName = "/";
 
   @override
@@ -28,14 +29,10 @@ class SplashScreen extends StatelessWidget {
                 width: Sizes.size150 + Sizes.size30,
                 height: Sizes.size150 + Sizes.size30,
               ),
-              Gaps.v32,
-              const Text(
-                "라온라이팅",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Sizes.size40,
-                  fontWeight: FontWeight.bold,
-                ),
+              Gaps.v10,
+              Image.asset(
+                "assets/images/splash_font.png",
+                width: Sizes.size250,
               ),
             ],
           ),
