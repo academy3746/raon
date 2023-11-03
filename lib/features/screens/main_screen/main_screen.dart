@@ -85,66 +85,69 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                return SafeArea(
-                  child: WebView(
-                    initialUrl: url,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    onPageStarted: (String url) async {
-                      setState(() {
-                        isLoading = true;
-                      });
+                return SizedBox(
+                  height: constraints.maxHeight,
+                  child: SafeArea(
+                    child: WebView(
+                      initialUrl: url,
+                      javascriptMode: JavascriptMode.unrestricted,
+                      onPageStarted: (String url) async {
+                        setState(() {
+                          isLoading = true;
+                        });
 
-                      print("Current Url: $url");
-                    },
-                    onPageFinished: (String url) async {
-                      setState(() {
-                        isLoading = false;
-                      });
+                        print("Current Url: $url");
+                      },
+                      onPageFinished: (String url) async {
+                        setState(() {
+                          isLoading = false;
+                        });
 
-                      /// Soft Keyboard hide input field on Android issue
-                      if (Platform.isAndroid) {
-                        if (url.contains(url) && viewController != null) {
-                          await viewController!.runJavascript("""
-                            (function() {
-                              function scrollToFocusedInput(event) {
-                                const focusedElement = document.activeElement;
-                                if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
-                                  setTimeout(() => {
-                                    focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                  }, 500);
+                        /// Soft Keyboard hide input field on Android issue
+                        if (Platform.isAndroid) {
+                          if (url.contains(url) && viewController != null) {
+                            await viewController!.runJavascript("""
+                              (function() {
+                                function scrollToFocusedInput(event) {
+                                  const focusedElement = document.activeElement;
+                                  if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
+                                    setTimeout(() => {
+                                      focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    }, 500);
+                                  }
                                 }
-                              }
-                              document.addEventListener('focus', scrollToFocusedInput, true);
-                            })();
-                          """);
+                                document.addEventListener('focus', scrollToFocusedInput, true);
+                              })();
+                            """);
+                          }
                         }
-                      }
-                    },
-                    onWebViewCreated:
-                        (WebViewController webViewController) async {
-                      _controller.complete(webViewController);
-                      viewController = webViewController;
+                      },
+                      onWebViewCreated:
+                          (WebViewController webViewController) async {
+                        _controller.complete(webViewController);
+                        viewController = webViewController;
 
-                      /// Get Cookie Statement
-                      await appCookieHandler?.setCookies(
-                        appCookieHandler!.cookieValue,
-                        appCookieHandler!.domain,
-                        appCookieHandler!.cookieName,
-                        appCookieHandler!.url,
-                      );
-                    },
-                    onWebResourceError: (error) {
-                      print("Error Code: ${error.errorCode}");
-                      print("Error Description: ${error.description}");
-                    },
-                    zoomEnabled: false,
-                    gestureRecognizers: Set()
-                      ..add(
-                        Factory<EagerGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
+                        /// Get Cookie Statement
+                        await appCookieHandler?.setCookies(
+                          appCookieHandler!.cookieValue,
+                          appCookieHandler!.domain,
+                          appCookieHandler!.cookieName,
+                          appCookieHandler!.url,
+                        );
+                      },
+                      onWebResourceError: (error) {
+                        print("Error Code: ${error.errorCode}");
+                        print("Error Description: ${error.description}");
+                      },
+                      zoomEnabled: false,
+                      gestureRecognizers: Set()
+                        ..add(
+                          Factory<EagerGestureRecognizer>(
+                            () => EagerGestureRecognizer(),
+                          ),
                         ),
-                      ),
-                    gestureNavigationEnabled: true,
+                      gestureNavigationEnabled: true,
+                    ),
                   ),
                 );
               },
