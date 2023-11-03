@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
+import 'package:raon/features/widgets/app_cookie_handler.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
 import 'package:raon/features/widgets/permission_handler.dart';
 
@@ -19,13 +20,16 @@ class _MainScreenState extends State<MainScreen> {
   /// Initialize WebView Controller
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
-  WebViewController? _viewController;
+  WebViewController? viewController;
 
   /// Initialize Main Page URL
   final String url = "http://raon.sogeum.kr/";
 
   /// Import BackHandlerButton
-  BackHandlerButton? _backHandlerButton;
+  BackHandlerButton? backHandlerButton;
+
+  /// Import App Cookie Handler
+  AppCookieHandler? appCookieHandler;
 
   @override
   void initState() {
@@ -34,11 +38,11 @@ class _MainScreenState extends State<MainScreen> {
     /// Improve Android Performance
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
-    /// Exit Application with double touch on foreground
+    /// Exit Application with double touch
     _controller.future.then(
       (WebViewController webViewController) {
-        _viewController = webViewController;
-        _backHandlerButton = BackHandlerButton(
+        viewController = webViewController;
+        backHandlerButton = BackHandlerButton(
           context: context,
           controller: webViewController,
           mainUrl: url,
@@ -49,14 +53,17 @@ class _MainScreenState extends State<MainScreen> {
     /// Request user permission to access external storage
     StoragePermissionHandler permissionHandler = StoragePermissionHandler(context);
     permissionHandler.requestStoragePermission();
+
+    /// Initialize Cookie Settings
+    appCookieHandler = AppCookieHandler(url, url);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (_backHandlerButton != null) {
-          return _backHandlerButton!.onWillPop();
+        if (backHandlerButton != null) {
+          return backHandlerButton!.onWillPop();
         }
         return false;
       },
@@ -72,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             onWebViewCreated: (WebViewController webViewController) async {
               _controller.complete(webViewController);
-              _viewController = webViewController;
+              viewController = webViewController;
             },
             onWebResourceError: (error) {
               print("Error Code: ${error.errorCode}");
