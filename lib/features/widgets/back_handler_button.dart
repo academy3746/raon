@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class BackHandlerButton {
   BuildContext context;
   DateTime? lastPressed;
+  String? url;
   void Function()? onExit;
 
   BackHandlerButton({
     required this.context,
     this.onExit,
+    this.url,
   });
 
   Future<bool> onWillPop() async {
