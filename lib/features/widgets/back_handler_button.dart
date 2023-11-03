@@ -1,15 +1,17 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_pro/webview_flutter.dart';
 
 class BackHandlerButton {
   BuildContext context;
   DateTime? lastPressed;
-  String? url;
-  void Function()? onExit;
+  String? mainUrl;
+  WebViewController? controller;
 
   BackHandlerButton({
     required this.context,
-    this.onExit,
-    this.url,
+    this.mainUrl,
+    this.controller,
   });
 
   Future<bool> onWillPop() async {
@@ -18,22 +20,28 @@ class BackHandlerButton {
         now.difference(lastPressed!) > const Duration(seconds: 2);
 
     if (interval) {
-      lastPressed = now;
-      const snackBar = SnackBar(
-        content: Text("뒤로가기 버튼을 한 번 더 누르면 앱이 종료됩니다!"),
-        duration: Duration(seconds: 2),
-      );
+      String? currentUrl = await controller?.currentUrl();
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(snackBar);
+      if (currentUrl != null && currentUrl == mainUrl) {
+        lastPressed = now;
+        const snackBar = SnackBar(
+          content: Text("뒤로가기 버튼을 한 번 더 누르면 앱이 종료됩니다!"),
+          duration: Duration(seconds: 2),
+        );
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(snackBar);
+          return false;
+        }
+      } else {
+        controller?.goBack();
         return false;
       }
     } else {
-      if (onExit != null) {
-        onExit!();
-        return true;
+      if (context.mounted) {
+        exit(0);
       }
     }
 
