@@ -100,6 +100,25 @@ class _MainScreenState extends State<MainScreen> {
                       setState(() {
                         isLoading = false;
                       });
+
+                      /// Soft Keyboard hide input field on Android issue
+                      if (Platform.isAndroid) {
+                        if (url.contains(url) && viewController != null) {
+                          await viewController!.runJavascript("""
+                            (function() {
+                              function scrollToFocusedInput(event) {
+                                const focusedElement = document.activeElement;
+                                if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
+                                  setTimeout(() => {
+                                    focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  }, 500);
+                                }
+                              }
+                              document.addEventListener('focus', scrollToFocusedInput, true);
+                            })();
+                          """);
+                        }
+                      }
                     },
                     onWebViewCreated:
                         (WebViewController webViewController) async {
