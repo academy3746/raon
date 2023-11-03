@@ -33,11 +33,11 @@ class BackHandlerButton {
           ScaffoldMessenger.of(context)
             ..removeCurrentSnackBar()
             ..showSnackBar(snackBar);
-          return false;
+          return Future.value(false);
         }
       } else {
         controller?.goBack();
-        return false;
+        return Future.value(false);
       }
     } else {
       if (context.mounted) {
@@ -45,6 +45,6 @@ class BackHandlerButton {
       }
     }
 
-    return true;
+    return Future.value(true);
   }
 }
