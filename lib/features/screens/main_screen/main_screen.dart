@@ -1,6 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_collection_literals
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:raon/features/widgets/app_cookie_handler.dart';
@@ -110,6 +112,14 @@ class _MainScreenState extends State<MainScreen> {
                       print("Error Code: ${error.errorCode}");
                       print("Error Description: ${error.description}");
                     },
+                    zoomEnabled: true,
+                    gestureRecognizers: Set()
+                      ..add(
+                        Factory<EagerGestureRecognizer>(
+                              () => EagerGestureRecognizer(),
+                        ),
+                      ),
+                    gestureNavigationEnabled: true,
                   ),
                 );
               },
