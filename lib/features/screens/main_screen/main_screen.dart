@@ -19,7 +19,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// Initialize WebView Controller
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
@@ -38,8 +38,21 @@ class _MainScreenState extends State<MainScreen> {
   bool isLoading = false;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      backHandlerButton?.isAppForeground = true;
+    } else {
+      backHandlerButton?.isAppForeground = false;
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     /// Improve Android Performance
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
@@ -70,22 +83,29 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (backHandlerButton != null) {
-          return backHandlerButton!.onWillPop();
-        }
-        return false;
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return SizedBox(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return WillPopScope(
+                onWillPop: () async {
+                  if (backHandlerButton != null) {
+                    return backHandlerButton!.onWillPop();
+                  }
+                  return false;
+                },
+                child: SizedBox(
                   height: constraints.maxHeight,
                   child: SafeArea(
                     child: WebView(
@@ -149,16 +169,16 @@ class _MainScreenState extends State<MainScreen> {
                       gestureNavigationEnabled: true,
                     ),
                   ),
-                );
-              },
-            ),
-            isLoading
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : Container(),
-          ],
-        ),
+                ),
+              );
+            },
+          ),
+          isLoading
+              ? const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              : Container(),
+        ],
       ),
     );
   }
