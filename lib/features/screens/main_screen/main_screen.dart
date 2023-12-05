@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_collection_literals
+// ignore_for_file: avoid_print, prefer_collection_literals, deprecated_member_use
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -9,6 +9,7 @@ import 'package:raon/features/widgets/app_cookie_handler.dart';
 import 'package:raon/features/widgets/app_version_check_handler.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
 import 'package:raon/features/widgets/permission_handler.dart';
+import 'package:tosspayments_widget_sdk_flutter/model/tosspayments_url.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -43,8 +44,12 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
     if (state == AppLifecycleState.resumed) {
       backHandlerButton?.isAppForeground = true;
+
+      print("앱이 포그라운드 상태입니다.");
     } else {
       backHandlerButton?.isAppForeground = false;
+
+      print("앱이 백그라운드 상태입니다.");
     }
   }
 
@@ -154,6 +159,22 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                           appCookieHandler!.cookieName,
                           appCookieHandler!.url,
                         );
+                      },
+                      navigationDelegate: (request) async {
+                        /// Toss Payments
+                        final appScheme = ConvertUrl(request.url);
+
+                        if (appScheme.isAppLink()) {
+                          try {
+                            await appScheme.launchApp();
+                          } on Error catch(e) {
+                            print("Request to Toss Payments is invalid: $e");
+                          }
+
+                          return NavigationDecision.prevent;
+                        }
+
+                        return NavigationDecision.navigate;
                       },
                       onWebResourceError: (error) {
                         print("Error Code: ${error.errorCode}");

@@ -3,17 +3,27 @@ import 'package:raon/constants/gaps.dart';
 import 'package:raon/constants/sizes.dart';
 import 'package:raon/features/screens/main_screen/main_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   static String routeName = "/";
 
   @override
-  Widget build(BuildContext context) {
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, MainScreen.routeName);
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
