@@ -10,6 +10,7 @@ import 'package:raon/features/widgets/app_version_check_handler.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
 import 'package:raon/features/widgets/permission_handler.dart';
 import 'package:tosspayments_widget_sdk_flutter/model/tosspayments_url.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -24,6 +25,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// Initialize WebView Controller
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
+
   WebViewController? viewController;
 
   /// Initialize Main Page URL
@@ -77,6 +79,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     /// Request user permission to access external storage
     StoragePermissionHandler permissionHandler =
         StoragePermissionHandler(context);
+
     permissionHandler.requestStoragePermission();
 
     /// Initialize Cookie Settings
@@ -84,6 +87,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
     /// App Version Check Manually
     AppVersionChecker appVersionChecker = AppVersionChecker(context);
+
     appVersionChecker.getAppVersion();
   }
 
@@ -169,6 +173,18 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                             await appScheme.launchApp();
                           } on Error catch(e) {
                             print("Request to Toss Payments is invalid: $e");
+                          }
+
+                          return NavigationDecision.prevent;
+                        }
+
+                        /// External Browser
+                        if (!request.url.contains(url)) {
+                          if (await canLaunchUrl(Uri.parse(request.url))) {
+                            await launchUrl(
+                              Uri.parse(request.url),
+                              mode: LaunchMode.externalApplication,
+                            );
                           }
 
                           return NavigationDecision.prevent;
