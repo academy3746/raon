@@ -10,7 +10,6 @@ import 'package:raon/features/widgets/app_version_check_handler.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
 import 'package:raon/features/widgets/permission_handler.dart';
 import 'package:tosspayments_widget_sdk_flutter/model/tosspayments_url.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -39,21 +38,6 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
   /// Page Loading Indicator
   bool isLoading = false;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.resumed) {
-      backHandlerButton?.isAppForeground = true;
-
-      print("앱이 포그라운드 상태입니다.");
-    } else {
-      backHandlerButton?.isAppForeground = false;
-
-      print("앱이 백그라운드 상태입니다.");
-    }
-  }
 
   @override
   void initState() {
@@ -89,6 +73,21 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     AppVersionChecker appVersionChecker = AppVersionChecker(context);
 
     appVersionChecker.getAppVersion();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      backHandlerButton?.isAppForeground = true;
+
+      print("앱이 포그라운드 상태입니다.");
+    } else {
+      backHandlerButton?.isAppForeground = false;
+
+      print("앱이 백그라운드 상태입니다.");
+    }
   }
 
   @override
@@ -171,20 +170,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                         if (appScheme.isAppLink()) {
                           try {
                             await appScheme.launchApp();
-                          } on Error catch(e) {
+                          } on Error catch (e) {
                             print("Request to Toss Payments is invalid: $e");
-                          }
-
-                          return NavigationDecision.prevent;
-                        }
-
-                        /// External Browser
-                        if (!request.url.contains(url)) {
-                          if (await canLaunchUrl(Uri.parse(request.url))) {
-                            await launchUrl(
-                              Uri.parse(request.url),
-                              mode: LaunchMode.externalApplication,
-                            );
                           }
 
                           return NavigationDecision.prevent;
