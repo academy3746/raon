@@ -70,7 +70,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     permissionHandler.requestStoragePermission();
 
     /// Initialize Cookie Settings
-    appCookieHandler = AppCookieHandler(url, url);
+    appCookieHandler = AppCookieHandler(homeUrl, url);
 
     /// App Version Check Manually
     AppVersionChecker appVersionChecker = AppVersionChecker(context);
