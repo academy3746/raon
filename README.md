@@ -1,6 +1,5 @@
-# raon
-
-라온조명 하이브리드 앱
+# Introduction
+을지 라이팅 B2C 하이브리드 앱 (Android / IOS / Web)
 
 ## Getting Started
 
