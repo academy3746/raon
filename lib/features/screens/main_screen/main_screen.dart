@@ -28,7 +28,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   WebViewController? viewController;
 
   /// Initialize Main Page URL
-  final String url = "http://raon.sogeum.kr/";
+  final String url = "http://uljilight.co.kr/?pn=main";
+
+  final String homeUrl = "http://uljilight.co.kr/";
 
   /// Import BackHandlerButton
   BackHandlerButton? backHandlerButton;
@@ -56,6 +58,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           context: context,
           controller: webViewController,
           mainUrl: url,
+          homeUrl: homeUrl,
         );
       },
     );
@@ -80,12 +83,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.resumed) {
-      backHandlerButton?.isAppForeground = true;
-
       print("앱이 포그라운드 상태입니다.");
     } else {
-      backHandlerButton?.isAppForeground = false;
-
       print("앱이 백그라운드 상태입니다.");
     }
   }
@@ -105,7 +104,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       body: Stack(
         children: [
           LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
+            builder: (context, constraints) {
               return WillPopScope(
                 onWillPop: () async {
                   if (backHandlerButton != null) {
