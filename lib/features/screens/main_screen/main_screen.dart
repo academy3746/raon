@@ -30,6 +30,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// Initialize Main Page URL
   final String url = "http://uljilight.co.kr/?pn=main";
 
+  /// Initialize Home URL
   final String homeUrl = "http://uljilight.co.kr/";
 
   /// Import BackHandlerButton
