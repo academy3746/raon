@@ -23,6 +23,9 @@ dependencies:
   package_info: ^2.0.2
   tosspayments_widget_sdk_flutter: ^1.0.2
   fluttertoast: ^8.2.4
+  fk_user_agent: ^2.1.0
+  android_id: ^0.3.6
+  device_info_plus: ^9.1.1
 
 dev_dependencies:
   flutter_test:

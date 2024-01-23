@@ -8,7 +8,7 @@ import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:raon/features/widgets/app_cookie_handler.dart';
 import 'package:raon/features/widgets/app_version_check_handler.dart';
 import 'package:raon/features/widgets/back_handler_button.dart';
-import 'package:raon/features/widgets/permission_handler.dart';
+import 'package:raon/features/widgets/user_info.dart';
 import 'package:tosspayments_widget_sdk_flutter/model/tosspayments_url.dart';
 
 class MainScreen extends StatefulWidget {
@@ -42,11 +42,18 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// Page Loading Indicator
   bool isLoading = false;
 
+  /// Get Unique User Info
+  UserInfo userInfo = UserInfo();
+
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      userInfo.getUserAgent();
+    });
 
     /// Improve Android Performance
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
@@ -63,12 +70,6 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         );
       },
     );
-
-    /// Request user permission to access external storage
-    StoragePermissionHandler permissionHandler =
-        StoragePermissionHandler(context);
-
-    permissionHandler.requestStoragePermission();
 
     /// Initialize Cookie Settings
     appCookieHandler = AppCookieHandler(homeUrl, url);
@@ -99,42 +100,49 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return WillPopScope(
-                onWillPop: () async {
-                  if (backHandlerButton != null) {
-                    return backHandlerButton!.onWillPop();
-                  }
-                  return false;
-                },
-                child: SizedBox(
-                  height: constraints.maxHeight,
-                  child: SafeArea(
-                    child: WebView(
-                      initialUrl: url,
-                      javascriptMode: JavascriptMode.unrestricted,
-                      onPageStarted: (String url) async {
-                        setState(() {
-                          isLoading = true;
-                        });
+          FutureBuilder<String>(
+            future: userInfo.getAppScheme(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print("App UserAgent: ${snapshot.data}");
+                return WillPopScope(
+                  onWillPop: () async {
+                    if (backHandlerButton != null) {
+                      return backHandlerButton!.onWillPop();
+                    }
+                    return false;
+                  },
+                  child: SizedBox(
+                    height: height,
+                    width: width,
+                    child: SafeArea(
+                      child: WebView(
+                        initialUrl: url,
+                        javascriptMode: JavascriptMode.unrestricted,
+                        onPageStarted: (String url) async {
+                          setState(() {
+                            isLoading = true;
+                          });
 
-                        print("Current Url: $url");
-                      },
-                      onPageFinished: (String url) async {
-                        setState(() {
-                          isLoading = false;
-                        });
+                          print("Current Url: $url");
+                        },
+                        onPageFinished: (String url) async {
+                          setState(() {
+                            isLoading = false;
+                          });
 
-                        /// Soft Keyboard hide input field on Android issue
-                        if (Platform.isAndroid) {
-                          if (url.contains(url) && viewController != null) {
-                            await viewController!.runJavascript("""
+                          /// Soft Keyboard hide input field on Android issue
+                          if (Platform.isAndroid) {
+                            if (url.contains(url) && viewController != null) {
+                              await viewController!.runJavascript("""
                               (function() {
                                 function scrollToFocusedInput(event) {
                                   const focusedElement = document.activeElement;
@@ -147,54 +155,60 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                                 document.addEventListener('focus', scrollToFocusedInput, true);
                               })();
                             """);
+                            }
                           }
-                        }
-                      },
-                      onWebViewCreated:
-                          (WebViewController webViewController) async {
-                        _controller.complete(webViewController);
-                        viewController = webViewController;
+                        },
+                        onWebViewCreated:
+                            (WebViewController webViewController) async {
+                          _controller.complete(webViewController);
+                          viewController = webViewController;
 
-                        /// Get Cookie Statement
-                        await appCookieHandler?.setCookies(
-                          appCookieHandler!.cookieValue,
-                          appCookieHandler!.domain,
-                          appCookieHandler!.cookieName,
-                          appCookieHandler!.url,
-                        );
-                      },
-                      navigationDelegate: (request) async {
-                        /// Toss Payments
-                        final appScheme = ConvertUrl(request.url);
+                          /// Get Cookie Statement
+                          await appCookieHandler?.setCookies(
+                            appCookieHandler!.cookieValue,
+                            appCookieHandler!.domain,
+                            appCookieHandler!.cookieName,
+                            appCookieHandler!.url,
+                          );
+                        },
+                        navigationDelegate: (request) async {
+                          /// Toss Payments
+                          final appScheme = ConvertUrl(request.url);
 
-                        if (appScheme.isAppLink()) {
-                          try {
-                            await appScheme.launchApp();
-                          } on Error catch (e) {
-                            print("Request to Toss Payments is invalid: $e");
+                          if (appScheme.isAppLink()) {
+                            try {
+                              await appScheme.launchApp();
+                            } on Error catch (e) {
+                              print("Request to Toss Payments is invalid: $e");
+                            }
+
+                            return NavigationDecision.prevent;
                           }
 
-                          return NavigationDecision.prevent;
-                        }
-
-                        return NavigationDecision.navigate;
-                      },
-                      onWebResourceError: (error) {
-                        print("Error Code: ${error.errorCode}");
-                        print("Error Description: ${error.description}");
-                      },
-                      zoomEnabled: false,
-                      gestureRecognizers: Set()
-                        ..add(
-                          Factory<EagerGestureRecognizer>(
-                            () => EagerGestureRecognizer(),
+                          return NavigationDecision.navigate;
+                        },
+                        onWebResourceError: (error) {
+                          print("Error Code: ${error.errorCode}");
+                          print("Error Description: ${error.description}");
+                        },
+                        zoomEnabled: false,
+                        gestureRecognizers: Set()
+                          ..add(
+                            Factory<EagerGestureRecognizer>(
+                                  () => EagerGestureRecognizer(),
+                            ),
                           ),
-                        ),
-                      gestureNavigationEnabled: true,
+                        gestureNavigationEnabled: true,
+                        userAgent: snapshot.data,
+                      ),
                     ),
                   ),
-                ),
-              );
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
             },
           ),
           isLoading
