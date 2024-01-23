@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:raon/features/screens/main_screen/main_screen.dart';
-import 'package:raon/features/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:raon/features/screens/splash_screen/splash_screen.dart';
 
 void main() async {
@@ -37,7 +36,6 @@ class RaonApp extends StatelessWidget {
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
-        OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
       },
     );
