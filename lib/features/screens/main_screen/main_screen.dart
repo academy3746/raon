@@ -109,10 +109,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       body: Stack(
         children: [
           FutureBuilder<String>(
-            future: userInfo.getAppScheme(),
+            future: userInfo.sendUserAgent(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print("App UserAgent: ${snapshot.data}");
+                print("${snapshot.data}");
                 return WillPopScope(
                   onWillPop: () async {
                     if (backHandlerButton != null) {

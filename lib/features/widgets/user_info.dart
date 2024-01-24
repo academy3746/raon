@@ -19,7 +19,7 @@ class UserInfo {
 
   /// Get Unique Device ID
   Future<String> getDeviceId() async {
-    var deviceIdentifier = "undefined";
+    var deviceId = "undefined";
 
     var deviceInfo = DeviceInfoPlugin();
 
@@ -28,20 +28,20 @@ class UserInfo {
 
       String? androidId = await androidInfo.getId();
 
-      deviceIdentifier = androidId!;
+      deviceId = androidId!;
     } else if (Platform.isIOS) {
       var iosInfo = await deviceInfo.iosInfo;
 
-      deviceIdentifier = iosInfo.identifierForVendor!;
+      deviceId = iosInfo.identifierForVendor!;
     } else if (kIsWeb) {
       var webInfo = await deviceInfo.webBrowserInfo;
 
-      deviceIdentifier = webInfo.vendor! +
+      deviceId = webInfo.vendor! +
           webInfo.userAgent! +
           webInfo.hardwareConcurrency.toString();
     }
 
-    return deviceIdentifier;
+    return deviceId;
   }
 
   /// Get User Agent
@@ -53,19 +53,19 @@ class UserInfo {
     return userAgent;
   }
 
-  /// Generate App Scheme
-  Future<String> getAppScheme() async {
+  /// Customized User Agent
+  Future<String> sendUserAgent() async {
     var scheme = "undefined";
 
     var agent = await getUserAgent();
 
-    var hyApp = "raonApp;";
+    var isApp = "hyapp;";
 
     var appId = await getDeviceId();
 
     var version = await getAppVersion();
 
-    scheme = "$agent ($hyApp uljilight.co.kr $appId $version)";
+    scheme = "$agent ($isApp uljilight.co.kr $appId $version)";
 
     return scheme;
   }
