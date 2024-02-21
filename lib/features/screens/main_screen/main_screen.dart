@@ -28,10 +28,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   WebViewController? viewController;
 
   /// Initialize Main Page URL
-  final String url = "http://uljilight.co.kr/?pn=main";
+  final String url = "https://lightlink24.co.kr/?pn=main";
 
   /// Initialize Home URL
-  final String homeUrl = "http://uljilight.co.kr/";
+  final String homeUrl = "https://lightlink24.co.kr/";
 
   /// Import BackHandlerButton
   BackHandlerButton? backHandlerButton;
