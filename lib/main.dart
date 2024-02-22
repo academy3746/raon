@@ -17,9 +17,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage((message) async {
     var msgController = Get.put(MsgController());
 
-    var backGround = await msgController.onBackgroundHandler(message);
-
-    return backGround;
+    await msgController.onBackgroundHandler(message);
   });
 
   await SystemChrome.setPreferredOrientations(
