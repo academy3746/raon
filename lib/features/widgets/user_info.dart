@@ -55,6 +55,7 @@ class UserInfo {
     return userAgent;
   }
 
+  /// Get FCM Token from Firebase Console
   Future<String?> getFcmToken() async {
     var msgController = Get.put(MsgController());
 
