@@ -137,7 +137,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                             isLoading = false;
                           });
 
-                          /// Soft Keyboard hide  Input Field on Android
+                          /// Soft Keyboard hide TextField on Android
                           if (Platform.isAndroid) {
                             if (url.contains(url) && viewController != null) {
                               await viewController!.runJavascript("""
