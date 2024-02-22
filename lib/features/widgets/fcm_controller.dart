@@ -95,8 +95,7 @@ class MsgController extends GetxController {
 
         /// Check Notification whether is or not
         if (message.notification != null) {
-          print(
-              "Message also contained a notification: ${message.notification!.body}");
+          print("Notification: ${message.notification!.body}");
         }
       } else if (notification != null && apple != null) {
         plugin.show(
