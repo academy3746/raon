@@ -24,7 +24,6 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// Initialize WebView Controller
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
-
   WebViewController? viewController;
 
   /// Initialize Main Page URL
@@ -76,7 +75,6 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
     /// App Version Check Manually
     AppVersionChecker appVersionChecker = AppVersionChecker(context);
-
     appVersionChecker.getAppVersion();
   }
 

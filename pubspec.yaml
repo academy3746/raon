@@ -26,6 +26,11 @@ dependencies:
   fk_user_agent: ^2.1.0
   android_id: ^0.3.6
   device_info_plus: ^9.1.1
+  firebase_core: ^2.24.2
+  firebase_crashlytics: ^3.4.9
+  firebase_analytics: ^10.8.0
+  firebase_messaging: ^14.7.10
+  flutter_local_notifications: ^9.1.5
 
 dev_dependencies:
   flutter_test:

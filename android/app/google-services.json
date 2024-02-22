@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "796050374007",
+    "project_id": "lightlink24-ec138",
+    "storage_bucket": "lightlink24-ec138.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796050374007:android:f512b7ffa9ddddb517f572",
+        "android_client_info": {
+          "package_name": "kr.sogeum.raon_b2c"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9JBWoyg9IeUQXCtqx6TWXvtQvAQq0x8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
