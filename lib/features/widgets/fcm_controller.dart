@@ -8,8 +8,8 @@ class MsgController extends GetxController {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   @override
-  void onInit() async {
-    /// Firebase 서버에 권한 요청
+  Future<void> onInit() async {
+    /// Request Permission
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -23,8 +23,9 @@ class MsgController extends GetxController {
     /// Debugging Code
     print(settings.authorizationStatus);
 
-    getToken();
-    onMessage();
+    await getToken();
+
+    await onMessage();
 
     super.onInit();
   }
@@ -151,8 +152,8 @@ class MsgController extends GetxController {
         ),
       );
 
-      Future.delayed(const Duration(hours: 1), () {
-        plugin.cancel(notificationId);
+      Future.delayed(const Duration(hours: 1), () async {
+        await plugin.cancel(notificationId);
       });
     } catch (e) {
       print("푸시 전송 실패: $e");
