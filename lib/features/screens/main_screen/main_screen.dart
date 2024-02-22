@@ -61,6 +61,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     _controller.future.then(
       (WebViewController webViewController) {
         viewController = webViewController;
+
         backHandlerButton = BackHandlerButton(
           context: context,
           controller: webViewController,
