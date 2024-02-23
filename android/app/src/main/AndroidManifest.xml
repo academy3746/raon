@@ -17,7 +17,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="라온라이팅"
+        android:label="라이트링크"
         android:usesCleartextTraffic="true">
         <provider
             android:name="androidx.core.content.FileProvider"

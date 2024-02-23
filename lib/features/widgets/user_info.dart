@@ -70,7 +70,7 @@ class UserInfo {
 
     var agent = await getUserAgent();
 
-    var isApp = "hyapp;";
+    var isApp = "b2cApp";
 
     var appId = await getDeviceId();
 
@@ -78,7 +78,7 @@ class UserInfo {
 
     var token = await getFcmToken();
 
-    scheme = "$agent ($isApp lightlink24.co.kr $appId $version $token)";
+    scheme = "$agent ($isApp; lightlink24.co.kr; $appId; $version; $token)";
 
     return scheme;
   }
