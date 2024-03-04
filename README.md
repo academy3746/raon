@@ -74,12 +74,3 @@
     <li><a href="https://github.com/academy3746/raon_b2c/blob/main/lib/features/screens/main_screen/main_screen.dart#L53">과정2</a></li>
     <li><a href="https://github.com/academy3746/raon_b2c/blob/main/lib/features/screens/main_screen/main_screen.dart#L111">과정3</a></li>
 </div>
-
-<div style="margin-top: 50px">
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
-<p></p>
-</div>
