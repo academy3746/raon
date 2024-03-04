@@ -9,7 +9,7 @@ import 'package:raon/features/screens/main_screen/main_screen.dart';
 import 'package:raon/features/screens/splash_screen/splash_screen.dart';
 import 'package:raon/features/widgets/fcm_controller.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
