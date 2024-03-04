@@ -20,12 +20,8 @@ Future<void> main() async {
     await msgController.onBackgroundHandler(message);
   });
 
-  await SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp],
-  );
-
-  await runZonedGuarded(() async {}, (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack);
+  await runZonedGuarded(() async {}, (error, stack) async {
+    await FirebaseCrashlytics.instance.recordError(error, stack);
   });
 
   SystemChrome.setSystemUIOverlayStyle(
