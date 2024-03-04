@@ -45,8 +45,10 @@
     <p>회원과 비회원을 구분하기에 앞서 <strong>앱 설치 여부</strong>부터 판정해야 하기 때문이다.</p>
     <p>그래야만 로그아웃 상태의 앱 유저를 비회원으로 처리할 수 있다.</p>
     <p>하지만 하이브리드 앱과 모바일 브라우저는 사실상 동일한 환경이기 때문에 클라이언트에서 이 부분을 처리해줘야 한다.</p>
-    <li><i>Native App User Agent: Mozilla/5.0 (Linux; Android 13; SM-N986N Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/121.0.6167.180 Mobile Safari/537.36</i></li>
-    <li><i>Browser User Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36</i></li>
+    <p>
+        <li><i>Native App User Agent: Mozilla/5.0 (Linux; Android 13; SM-N986N Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/121.0.6167.180 Mobile Safari/537.36</i></li>
+        <li><i>Browser User Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36</i></li>
+    </p>
 </div>
 
 <div style="margin-top: 50px">
